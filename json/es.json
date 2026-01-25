@@ -1,0 +1,13 @@
+{
+  "titulo": "Sistema de Gestión de Eventos",
+  "menuEventos": "Eventos",
+  "menuUbicaciones": "Ubicaciones",
+  "menuContactos": "Contactos",
+  "menuAgenda": "Agenda",
+  "saludoTitulo": "Hola",
+  "saludoTexto": "Mucho gusto por habernos visitado. Este sistema sirve para gestionar, registrar y agregar eventos, ubicaciones y contactos, así como editar y eliminar.",
+  "registroGeneral": "Registro General",
+  "resumenEventos": "Eventos",
+  "resumenUbicaciones": "Ubicaciones",
+  "resumenContactos": "Contactos"
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WEB GESTOR DE EVENTOS</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+<header>
+  <h1 id="titulo">Sistema de Gestión de Eventos</h1>
+  <nav>
+    <ul>
+      <li><a id="menuEventos" href="eventos.html">Eventos</a></li>
+      <li><a id="menuUbicaciones" href="ubicaciones.html">Ubicaciones</a></li>
+      <li><a id="menuContactos" href="contactos.html">Contactos</a></li>
+      <li><a id="menuAgenda" href="ver_datos.html">Agenda</a></li>
+    </ul>
+  </nav>
+
+  <!-- Selector de idioma -->
+  <label for="selectorIdioma">🌐 Idioma:</label>
+  <select id="selectorIdioma">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</header>
+
+<main>
+  <!-- SALUDO -->
+  <section>
+    <h2 id="saludoTitulo">Hola</h2>
+    <p id="saludoTexto">
+      Mucho gusto por habernos visitado. Este sistema sirve para gestionar, registrar y agregar eventos, ubicaciones y contactos, así como editar y eliminar.
+    </p>
+  </section>
+
+  <!-- PANEL RESUMEN -->
+  <section class="panel-resumen">
+    <h2 id="registroGeneral">Registro General</h2>
+
+    <div class="cuadros">
+      <div class="cuadro">
+        <h3 id="resumenEventos">📅 Eventos</h3>
+        <p id="totalEventos">0</p>
+      </div>
+
+      <div class="cuadro">
+        <h3 id="resumenUbicaciones">📍 Ubicaciones</h3>
+        <p id="totalUbicaciones">0</p>
+      </div>
+
+      <div class="cuadro">
+        <h3 id="resumenContactos">👤 Contactos</h3>
+        <p id="totalContactos">0</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 INTERACCIÓN HOMBRE MAQUINA</p>
+  <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
+</footer>
+
+<!-- 🔥 FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+/* CONFIGURACIÓN FIREBASE CASO 2 */
+const firebaseConfig = {
+  apiKey: "AIzaSyAjsWFlifV6vrqfgPaiVvwnV6YeICRBWu4",
+  authDomain: "gestion-eventos-caso2.firebaseapp.com",
+  projectId: "gestion-eventos-caso2",
+  storageBucket: "gestion-eventos-caso2.appspot.com",
+  messagingSenderId: "133499209288",
+  appId: "1:133499209288:web:d1fdf1b96f2b9c3d07ba7d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// CONTADORES
+document.getElementById("totalEventos").innerText =
+  (await getDocs(collection(db, "eventos_caso2"))).size;
+
+document.getElementById("totalUbicaciones").innerText =
+  (await getDocs(collection(db, "ubicaciones_caso2"))).size;
+
+document.getElementById("totalContactos").innerText =
+  (await getDocs(collection(db, "contactos_caso2"))).size;
+</script>
+
+<!-- 🌐 MULTILENGUAJE -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const selector = document.getElementById("selectorIdioma");
+
+  async function cargarIdioma(lang) {
+    try {
+      const res = await fetch(`json/${lang}.json`);
+      const t = await res.json();
+
+      // Traducción automática de todos los elementos con id
+      for (const clave in t) {
+        const elemento = document.getElementById(clave);
+        if (elemento) {
+          elemento.innerText = t[clave];
+        }
+      }
+
+      // Mantener emojis en los títulos del resumen
+      if (document.getElementById("resumenEventos")) {
+        document.getElementById("resumenEventos").innerText = "📅 " + t.resumenEventos;
+      }
+      if (document.getElementById("resumenUbicaciones")) {
+        document.getElementById("resumenUbicaciones").innerText = "📍 " + t.resumenUbicaciones;
+      }
+      if (document.getElementById("resumenContactos")) {
+        document.getElementById("resumenContactos").innerText = "👤 " + t.resumenContactos;
+      }
+
+    } catch (error) {
+      console.error("Error al cargar idioma:", error);
+    }
+  }
+
+  selector.addEventListener("change", e => {
+    cargarIdioma(e.target.value);
+  });
+
+  cargarIdioma("es"); // idioma por defecto
+});
+</script>
+
+</body>
+</html>

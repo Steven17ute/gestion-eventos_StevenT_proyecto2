@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="tituloPagina">Registro de Eventos</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+<header>
+  <h1 id="titulo">Sistema de Gestión de Eventos</h1>
+  <nav>
+    <ul>
+      <li><a id="menuInicio" href="index.html">Inicio</a></li>
+      <li><a id="menuEventos" href="eventos.html">Eventos</a></li>
+      <li><a id="menuUbicaciones" href="ubicaciones.html">Ubicaciones</a></li>
+      <li><a id="menuContactos" href="contactos.html">Contactos</a></li>
+      <li><a id="menuAgenda" href="ver_datos.html">Agenda</a></li>
+    </ul>
+  </nav>
+
+  <!-- Selector de idioma -->
+  <label for="selectorIdioma">🌐 Idioma:</label>
+  <select id="selectorIdioma">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</header>
+
+<main>
+  <!-- REGISTRO -->
+  <section>
+    <h2 id="registrarEvento">Registrar nuevo evento</h2>
+
+    <form id="formEvento">
+      <input id="tituloEvento" placeholder="Título" required>
+      <input id="invitados" placeholder="Invitados">
+      <input type="date" id="fecha" required>
+      <input type="time" id="hora" required>
+      <input id="zona" placeholder="Zona horaria">
+      <textarea id="descripcion" placeholder="Descripción"></textarea>
+      <input id="clasificacion" placeholder="Clasificación">
+      <input id="lugar" placeholder="Lugar">
+
+      <label id="labelRepeticion">Repetición:</label>
+      <select id="repeticion">
+        <option value="Sin repetición">Sin repetición</option>
+        <option value="Diaria">Diaria</option>
+        <option value="Semanal">Semanal</option>
+        <option value="Mensual">Mensual</option>
+      </select>
+
+      <label>
+        <input type="checkbox" id="recordatorio">
+        <span id="labelRecordatorio">Activar recordatorio</span>
+      </label>
+
+      <button type="button" id="btnGuardarEvento" onclick="guardarEvento()">Guardar Evento</button>
+    </form>
+  </section>
+
+  <!-- LISTA -->
+  <section>
+    <h2 id="listaEventosTitulo">Lista de eventos</h2>
+    <ul id="listaEventos"></ul>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 INTERACCIÓN HOMBRE MAQUINA</p>
+  <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
+</footer>
+
+<!-- 🔥 FIREBASE EVENTOS -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+/* CONFIGURACIÓN FIREBASE CASO 2 */
+const firebaseConfig = {
+  apiKey: "AIzaSyAjsWFlifV6vrqfgPaiVvwnV6YeICRBWu4",
+  authDomain: "gestion-eventos-caso2.firebaseapp.com",
+  projectId: "gestion-eventos-caso2",
+  storageBucket: "gestion-eventos-caso2.appspot.com",
+  messagingSenderId: "133499209288",
+  appId: "1:133499209288:web:d1fdf1b96f2b9c3d07ba7d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* GUARDAR EVENTO */
+window.guardarEvento = async function () {
+  await addDoc(collection(db, "eventos_caso2"), {
+    titulo: tituloEvento.value,
+    invitados: invitados.value,
+    fecha: fecha.value,
+    hora: hora.value,
+    zona: zona.value,
+    descripcion: descripcion.value,
+    clasificacion: clasificacion.value,
+    lugar: lugar.value,
+    repeticion: repeticion.value,
+    recordatorio: recordatorio.checked ? "Sí" : "No",
+    creado: new Date()
+  });
+
+  alert("✅ Evento guardado");
+  document.getElementById("formEvento").reset();
+  cargarEventos();
+};
+
+/* MOSTRAR EVENTOS */
+async function cargarEventos() {
+  const lista = document.getElementById("listaEventos");
+  lista.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "eventos_caso2"));
+  querySnapshot.forEach((doc) => {
+    const e = doc.data();
+    lista.innerHTML += `
+      <li>
+        <strong>${e.titulo}</strong><br>
+        🗓 ${e.fecha} ⏰ ${e.hora}<br>
+        📍 ${e.lugar || "-"}<br>
+        🔁 ${e.repeticion || "-"}<br>
+        ⏰ Recordatorio: ${e.recordatorio || "No"}<br>
+        📝 ${e.descripcion || "-"}
+      </li>
+      <hr>
+    `;
+  });
+}
+
+/* CARGAR AL INICIAR */
+cargarEventos();
+</script>
+
+<!-- 🌐 MULTILENGUAJE -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const selector = document.getElementById("selectorIdioma");
+
+  async function cargarIdioma(lang) {
+    try {
+      const res = await fetch(`json/${lang}.json`);
+      const t = await res.json();
+
+      for (const clave in t) {
+        const elemento = document.getElementById(clave);
+        if (elemento) {
+          elemento.innerText = t[clave];
+        }
+      }
+    } catch (error) {
+      console.error("Error al cargar idioma:", error);
+    }
+  }
+
+  selector.addEventListener("change", e => {
+    cargarIdioma(e.target.value);
+  });
+
+  cargarIdioma("es"); // idioma por defecto
+});
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="tituloPagina">Registro de Ubicaciones</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+<header>
+  <h1 id="titulo">Sistema de Gestión de Eventos</h1>
+  <nav>
+    <ul>
+      <li><a id="menuInicio" href="index.html">Inicio</a></li>
+      <li><a id="menuEventos" href="eventos.html">Eventos</a></li>
+      <li><a id="menuUbicaciones" href="ubicaciones.html">Ubicaciones</a></li>
+      <li><a id="menuContactos" href="contactos.html">Contactos</a></li>
+      <li><a id="menuAgenda" href="ver_datos.html">Agenda</a></li>
+    </ul>
+  </nav>
+
+  <!-- Selector de idioma -->
+  <label for="selectorIdioma">🌐 Idioma:</label>
+  <select id="selectorIdioma">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</header>
+
+<main>
+  <!-- REGISTRO -->
+  <section>
+    <h2 id="registrarUbicacion">Registrar nueva ubicación</h2>
+
+    <form id="formUbicacion">
+      <input id="tituloUbicacion" placeholder="Título de la ubicación" required>
+      <input id="direccion" placeholder="Dirección" required>
+      <input id="latitud" placeholder="Latitud (ej: -0.1807)">
+      <input id="longitud" placeholder="Longitud (ej: -78.4678)">
+
+      <button type="button" id="btnGuardarUbicacion" onclick="guardarUbicacion()">Guardar Ubicación</button>
+    </form>
+  </section>
+
+  <!-- LISTA -->
+  <section>
+    <h2 id="listaUbicacionesTitulo">Lista de ubicaciones</h2>
+    <ul id="listaUbicaciones"></ul>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 INTERACCIÓN HOMBRE MAQUINA</p>
+  <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
+</footer>
+
+<!-- 🔥 FIREBASE UBICACIONES -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+/* CONFIGURACIÓN FIREBASE CASO 2 */
+const firebaseConfig = {
+  apiKey: "AIzaSyAjsWFlifV6vrqfgPaiVvwnV6YeICRBWu4",
+  authDomain: "gestion-eventos-caso2.firebaseapp.com",
+  projectId: "gestion-eventos-caso2",
+  storageBucket: "gestion-eventos-caso2.appspot.com",
+  messagingSenderId: "133499209288",
+  appId: "1:133499209288:web:d1fdf1b96f2b9c3d07ba7d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* GUARDAR UBICACIÓN */
+window.guardarUbicacion = async function () {
+  await addDoc(collection(db, "ubicaciones_caso2"), {
+    titulo: tituloUbicacion.value,
+    direccion: direccion.value,
+    latitud: latitud.value,
+    longitud: longitud.value,
+    creado: new Date()
+  });
+
+  alert("📍 Ubicación guardada");
+  document.getElementById("formUbicacion").reset();
+  cargarUbicaciones();
+};
+
+/* MOSTRAR UBICACIONES */
+async function cargarUbicaciones() {
+  const lista = document.getElementById("listaUbicaciones");
+  lista.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "ubicaciones_caso2"));
+  querySnapshot.forEach((doc) => {
+    const u = doc.data();
+    lista.innerHTML += `
+      <li>
+        <strong>${u.titulo}</strong><br>
+        📍 ${u.direccion}<br>
+        🌐 ${u.latitud || "-"}, ${u.longitud || "-"}
+      </li><hr>
+    `;
+  });
+}
+
+/* CARGAR AL INICIAR */
+cargarUbicaciones();
+</script>
+
+<!-- 🌐 MULTILENGUAJE -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const selector = document.getElementById("selectorIdioma");
+
+  async function cargarIdioma(lang) {
+    try {
+      const res = await fetch(`json/${lang}.json`);
+      const t = await res.json();
+
+      for (const clave in t) {
+        const elemento = document.getElementById(clave);
+        if (elemento) {
+          elemento.innerText = t[clave];
+        }
+      }
+    } catch (error) {
+      console.error("Error al cargar idioma:", error);
+    }
+  }
+
+  selector.addEventListener("change", e => {
+    cargarIdioma(e.target.value);
+  });
+
+  cargarIdioma("es"); // idioma por defecto
+});
+</script>
+
+</body>
+</html>

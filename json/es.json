@@ -1,4 +1,5 @@
 {
+  "tituloPagina": "WEB GESTOR DE EVENTOS",
   "titulo": "Sistema de Gestión de Eventos",
   "menuEventos": "Eventos",
   "menuUbicaciones": "Ubicaciones",
@@ -9,5 +10,22 @@
   "registroGeneral": "Registro General",
   "resumenEventos": "Eventos",
   "resumenUbicaciones": "Ubicaciones",
-  "resumenContactos": "Contactos"
+  "resumenContactos": "Contactos",
+  "btnAyuda": "Ayuda",
+  "btnEscuchar": "Escuchar",
+  
+  "labelInvitados": "Invitados",
+  "labelFecha": "Fecha",
+  "labelHora": "Hora",
+  "labelZona": "Zona",
+  "labelRecordatorio": "Recordatorio",
+  "labelLugar": "Lugar",
+  "labelDireccion": "Dirección",
+  "labelLat": "Lat",
+  "labelLng": "Lng",
+  "labelID": "ID",
+  "labelTel": "Tel",
+  "labelEmail": "Email",
+  "fotoCargada": "📷 Foto cargada",
+  "sinFoto": "Sin foto"
 }

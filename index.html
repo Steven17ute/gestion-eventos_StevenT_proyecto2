@@ -111,21 +111,26 @@ document.getElementById("totalContactos").innerText =
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const selector = document.getElementById("selectorIdioma");
-  let currentLang = "es";
+  let currentLang = "es.json";
 
   async function cargarIdioma(lang) {
     try {
-      const res = await fetch(`json/${lang}.json`);
+      const res = await fetch(`json/${lang}`);
       const t = await res.json();
 
       for (const clave in t) {
         const elemento = document.getElementById(clave);
         if (elemento) {
-          elemento.innerText = t[clave];
+          // 👇 Condición para traducir también el <title>
+          if (elemento.tagName === "TITLE") {
+            document.title = t[clave];
+          } else {
+            elemento.innerText = t[clave];
+          }
         }
       }
 
-      // Mantener emojis
+      // Mantener emojis en los títulos del resumen
       document.getElementById("resumenEventos").innerText = "📅 " + t.resumenEventos;
       document.getElementById("resumenUbicaciones").innerText = "📍 " + t.resumenUbicaciones;
       document.getElementById("resumenContactos").innerText = "👤 " + t.resumenContactos;
@@ -140,13 +145,13 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarIdioma(e.target.value);
   });
 
-  cargarIdioma("es"); // idioma por defecto
+  cargarIdioma("es.json"); // idioma por defecto
 
   // 🔊 Text-to-Speech
   document.getElementById("btnEscuchar").addEventListener("click", () => {
     const texto = document.getElementById("saludoTexto").innerText;
     const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.lang = currentLang === "es" ? "es-ES" : "en-US";
+    utterance.lang = currentLang.includes("es") ? "es-ES" : "en-US";
     speechSynthesis.speak(utterance);
   });
 

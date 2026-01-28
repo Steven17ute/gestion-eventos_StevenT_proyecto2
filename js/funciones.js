@@ -1,8 +1,6 @@
-// ✅ Control de formularios con soporte multilenguaje
-// ✅ Usa traducciones desde es.json / en.json
-
-// Variable global que se actualiza al cambiar idioma
-let traducciones = {};
+// ESTE ARCHIVO CONTROLA LOS FORMULARIOS DE EVENTOS, UBICACIONES Y CONTACTOS
+// ✅ Versión corregida para Caso Práctico 2
+// ✅ IDs alineados con los formularios HTML
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -26,9 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const clasificacion = document.getElementById("clasificacion").value;
       const lugar = document.getElementById("lugar").value;
 
-      // CREAR ELEMENTO EN LISTA
+      // CREAR ELEMENTO EN LISTA (solo pruebas locales)
       const li = document.createElement("li");
-      li.textContent = `${titulo} | ${traducciones.labelInvitados}: ${invitados} | ${traducciones.labelFecha}: ${fecha} ${hora} | ${traducciones.labelZona}: ${zona} | ${traducciones.labelRecordatorio}: ${recordatorio} | ${traducciones.labelLugar}: ${lugar}`;
+      li.textContent = `${titulo} | Invitados: ${invitados} | Fecha: ${fecha} ${hora} | Zona: ${zona} | Recordatorio: ${recordatorio} | Lugar: ${lugar}`;
       listaEventos.appendChild(li);
 
       formEvento.reset();
@@ -49,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const longitud = document.getElementById("longitud").value;
 
       const li = document.createElement("li");
-      li.textContent = `${titulo} | ${traducciones.labelDireccion}: ${direccion} | ${traducciones.labelLat}: ${latitud} | ${traducciones.labelLng}: ${longitud}`;
+      li.textContent = `${titulo} | Dirección: ${direccion} | Lat: ${latitud} | Lng: ${longitud}`;
       listaUbicaciones.appendChild(li);
 
       formUbicacion.reset();
@@ -69,56 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const identificacion = document.getElementById("identificacion").value;
       const telefono = document.getElementById("telefono").value;
       const email = document.getElementById("email").value;
-      const foto = document.getElementById("foto").value ? traducciones.fotoCargada : traducciones.sinFoto;
+      const foto = document.getElementById("foto").value ? "📷 Foto cargada" : "Sin foto";
 
       const li = document.createElement("li");
-      li.textContent = `${saludo} ${nombre} | ${traducciones.labelID}: ${identificacion} | ${traducciones.labelTel}: ${telefono} | ${traducciones.labelEmail}: ${email} | ${foto}`;
+      li.textContent = `${saludo} ${nombre} | ID: ${identificacion} | Tel: ${telefono} | Email: ${email} | ${foto}`;
       listaContactos.appendChild(li);
 
       formContacto.reset();
     });
   }
-});
-
-/* ================= MULTILENGUAJE ================= */
-async function cargarIdioma(lang) {
-  try {
-    const res = await fetch(`json/${lang}.json`);
-    traducciones = await res.json(); // Guardar traducciones globales
-
-    // Actualizar textos visibles en la interfaz
-    for (const clave in traducciones) {
-      const elemento = document.getElementById(clave);
-      if (elemento) {
-        if (elemento.tagName === "TITLE") {
-          elemento.textContent = traducciones[clave];
-        } else {
-          elemento.innerText = traducciones[clave];
-        }
-      }
-    }
-
-    // Mantener emojis en los títulos del resumen
-    if (document.getElementById("resumenEventos")) {
-      document.getElementById("resumenEventos").innerText = "📅 " + traducciones.resumenEventos;
-    }
-    if (document.getElementById("resumenUbicaciones")) {
-      document.getElementById("resumenUbicaciones").innerText = "📍 " + traducciones.resumenUbicaciones;
-    }
-    if (document.getElementById("resumenContactos")) {
-      document.getElementById("resumenContactos").innerText = "👤 " + traducciones.resumenContactos;
-    }
-
-  } catch (error) {
-    console.error("Error al cargar idioma:", error);
-  }
-}
-
-// Inicializar idioma por defecto
-document.addEventListener("DOMContentLoaded", () => {
-  const selector = document.getElementById("selectorIdioma");
-  selector.addEventListener("change", e => {
-    cargarIdioma(e.target.value);
-  });
-  cargarIdioma("es"); // idioma inicial
 });

@@ -76,4 +76,33 @@ document.addEventListener("DOMContentLoaded", () => {
       formContacto.reset();
     });
   }
+  /* ================= AYUDA (VIDEO) ================= */
+  const btnAyuda = document.getElementById("btnAyuda");
+  const helpModal = document.getElementById("helpModal");
+
+  if (btnAyuda && helpModal) {
+    btnAyuda.addEventListener("click", () => {
+      helpModal.style.display = "block";
+    });
+  }
+
+  /* ================= ESCUCHAR (TTS) ================= */
+  const btnEscuchar = document.getElementById("btnEscuchar");
+  if (btnEscuchar) {
+    btnEscuchar.addEventListener("click", () => {
+      const texto = document.getElementById("saludoTexto").innerText;
+      const utterance = new SpeechSynthesisUtterance(texto);
+      utterance.lang = "es-ES"; // Cambia a "en-US" si el idioma seleccionado es inglés
+      speechSynthesis.speak(utterance);
+    });
+  }
 });
+
+});
+/* ================= FUNCIÓN CERRAR AYUDA ================= */
+function cerrarAyuda() {
+  const helpModal = document.getElementById("helpModal");
+  if (helpModal) {
+    helpModal.style.display = "none";
+  }
+}

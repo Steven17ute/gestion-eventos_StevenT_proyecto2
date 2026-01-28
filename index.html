@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WEB GESTOR DE EVENTOS</title>
+  <title id="tituloPagina">WEB GESTOR DE EVENTOS</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 
 <body>
 <header>
   <h1 id="titulo">Sistema de Gestión de Eventos</h1>
-  <nav>
+  <nav aria-label="Menú principal">
     <ul>
       <li><a id="menuEventos" href="eventos.html">Eventos</a></li>
       <li><a id="menuUbicaciones" href="ubicaciones.html">Ubicaciones</a></li>
@@ -21,10 +21,13 @@
 
   <!-- Selector de idioma -->
   <label for="selectorIdioma">🌐 Idioma:</label>
-  <select id="selectorIdioma">
-    <option value="es">Español</option>
-    <option value="en">English</option>
+  <select id="selectorIdioma" aria-label="Selector de idioma">
+    <option value="es.json">Español</option>
+    <option value="en.json">English</option>
   </select>
+
+  <!-- Botón de ayuda -->
+  <button id="btnAyuda">❓ Ayuda</button>
 </header>
 
 <main>
@@ -34,6 +37,8 @@
     <p id="saludoTexto">
       Mucho gusto por habernos visitado. Este sistema sirve para gestionar, registrar y agregar eventos, ubicaciones y contactos, así como editar y eliminar.
     </p>
+    <!-- Botón escuchar -->
+    <button id="btnEscuchar">🔊 Escuchar</button>
   </section>
 
   <!-- PANEL RESUMEN -->
@@ -64,6 +69,15 @@
   <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
 </footer>
 
+<!-- 🎥 Modal de ayuda -->
+<div id="helpModal" style="display:none;" role="dialog" aria-labelledby="videoAyuda">
+  <video id="videoAyuda" controls>
+    <source src="videos/tutorial.mp4" type="video/mp4">
+    Tu navegador no soporta video.
+  </video>
+  <button onclick="cerrarAyuda()">Cerrar</button>
+</div>
+
 <!-- 🔥 FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -93,17 +107,17 @@ document.getElementById("totalContactos").innerText =
   (await getDocs(collection(db, "contactos_caso2"))).size;
 </script>
 
-<!-- 🌐 MULTILENGUAJE -->
+<!-- 🌐 MULTILENGUAJE + AUDIO + AYUDA -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const selector = document.getElementById("selectorIdioma");
+  let currentLang = "es";
 
   async function cargarIdioma(lang) {
     try {
       const res = await fetch(`json/${lang}.json`);
       const t = await res.json();
 
-      // Traducción automática de todos los elementos con id
       for (const clave in t) {
         const elemento = document.getElementById(clave);
         if (elemento) {
@@ -111,17 +125,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Mantener emojis en los títulos del resumen
-      if (document.getElementById("resumenEventos")) {
-        document.getElementById("resumenEventos").innerText = "📅 " + t.resumenEventos;
-      }
-      if (document.getElementById("resumenUbicaciones")) {
-        document.getElementById("resumenUbicaciones").innerText = "📍 " + t.resumenUbicaciones;
-      }
-      if (document.getElementById("resumenContactos")) {
-        document.getElementById("resumenContactos").innerText = "👤 " + t.resumenContactos;
-      }
+      // Mantener emojis
+      document.getElementById("resumenEventos").innerText = "📅 " + t.resumenEventos;
+      document.getElementById("resumenUbicaciones").innerText = "📍 " + t.resumenUbicaciones;
+      document.getElementById("resumenContactos").innerText = "👤 " + t.resumenContactos;
 
+      currentLang = lang;
     } catch (error) {
       console.error("Error al cargar idioma:", error);
     }
@@ -132,7 +141,24 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   cargarIdioma("es"); // idioma por defecto
+
+  // 🔊 Text-to-Speech
+  document.getElementById("btnEscuchar").addEventListener("click", () => {
+    const texto = document.getElementById("saludoTexto").innerText;
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.lang = currentLang === "es" ? "es-ES" : "en-US";
+    speechSynthesis.speak(utterance);
+  });
+
+  // 🎥 Ayuda
+  document.getElementById("btnAyuda").addEventListener("click", () => {
+    document.getElementById("helpModal").style.display = "block";
+  });
 });
+
+function cerrarAyuda() {
+  document.getElementById("helpModal").style.display = "none";
+}
 </script>
 
 </body>

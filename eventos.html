@@ -20,7 +20,6 @@
     </ul>
   </nav>
 
-  <!-- Selector de idioma -->
   <label for="selectorIdioma">🌐 Idioma:</label>
   <select id="selectorIdioma">
     <option value="es">Español</option>
@@ -29,12 +28,10 @@
 </header>
 
 <main>
-  <!-- REGISTRO -->
   <section>
     <h2 id="registrarEvento">Registrar nuevo evento</h2>
     
-    <!-- FORMULARIO -->
-     <form id="formEvento">
+    <form id="formEvento">
       <label for="tituloEvento" style="display:none;">Título</label>
       <input id="tituloEvento" placeholder="Título" aria-label="Título del evento" required>
       
@@ -77,7 +74,6 @@
     
   </section>
 
-  <!-- LISTA -->
   <section>
     <h2 id="listaEventosTitulo">Lista de eventos</h2>
     <ul id="listaEventos"></ul>
@@ -89,12 +85,10 @@
   <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
 </footer>
 
-<!-- 🔥 FIREBASE EVENTOS -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-/* CONFIGURACIÓN FIREBASE CASO 2 */
 const firebaseConfig = {
   apiKey: "AIzaSyAjsWFlifV6vrqfgPaiVvwnV6YeICRBWu4",
   authDomain: "gestion-eventos-caso2.firebaseapp.com",
@@ -107,19 +101,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* GUARDAR EVENTO */
 window.guardarEvento = async function () {
   await addDoc(collection(db, "eventos_caso2"), {
-    titulo: tituloEvento.value,
-    invitados: invitados.value,
-    fecha: fecha.value,
-    hora: hora.value,
-    zona: zona.value,
-    descripcion: descripcion.value,
-    clasificacion: clasificacion.value,
-    lugar: lugar.value,
-    repeticion: repeticion.value,
-    recordatorio: recordatorio.checked ? "Sí" : "No",
+    titulo: document.getElementById("tituloEvento").value,
+    invitados: document.getElementById("invitados").value,
+    fecha: document.getElementById("fecha").value,
+    hora: document.getElementById("hora").value,
+    zona: document.getElementById("zona").value,
+    descripcion: document.getElementById("descripcion").value,
+    clasificacion: document.getElementById("clasificacion").value,
+    lugar: document.getElementById("lugar").value,
+    repeticion: document.getElementById("repeticion").value,
+    recordatorio: document.getElementById("recordatorio").checked ? "Sí" : "No",
     creado: new Date()
   });
 
@@ -128,46 +121,39 @@ window.guardarEvento = async function () {
   cargarEventos();
 };
 
-/* MOSTRAR EVENTOS */
 async function cargarEventos() {
   const lista = document.getElementById("listaEventos");
   lista.innerHTML = "";
-
   const querySnapshot = await getDocs(collection(db, "eventos_caso2"));
   querySnapshot.forEach((doc) => {
     const e = doc.data();
-    lista.innerHTML += `
-      <li>
-        <strong>${e.titulo}</strong><br>
-        🗓 ${e.fecha} ⏰ ${e.hora}<br>
-        📍 ${e.lugar || "-"}<br>
-        🔁 ${e.repeticion || "-"}<br>
-        ⏰ Recordatorio: ${e.recordatorio || "No"}<br>
-        📝 ${e.descripcion || "-"}
-      </li>
-      <hr>
-    `;
+    lista.innerHTML += `<li><strong>${e.titulo}</strong><br>🗓 ${e.fecha} ⏰ ${e.hora}<br>📍 ${e.lugar || "-"}<br>🔁 ${e.repeticion || "-"}<br>⏰ Recordatorio: ${e.recordatorio || "No"}<br>📝 ${e.descripcion || "-"}</li><hr>`;
   });
 }
-
-/* CARGAR AL INICIAR */
 cargarEventos();
 </script>
 
-<!-- 🌐 MULTILENGUAJE -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const selector = document.getElementById("selectorIdioma");
 
   async function cargarIdioma(lang) {
     try {
+      localStorage.setItem("idiomaPreferido", lang);
       const res = await fetch(`json/${lang}.json`);
       const t = await res.json();
 
       for (const clave in t) {
         const elemento = document.getElementById(clave);
         if (elemento) {
+          // 1. Traduce etiquetas y botones
           elemento.innerText = t[clave];
+
+          // 2. Traduce placeholders y aria-labels de los campos (NECESARIO PARA WAVE)
+          if (elemento.tagName === "INPUT" || elemento.tagName === "TEXTAREA") {
+            elemento.placeholder = t[clave];
+            elemento.setAttribute("aria-label", t[clave]);
+          }
         }
       }
     } catch (error) {
@@ -175,14 +161,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  selector.addEventListener("change", e => {
-    cargarIdioma(e.target.value);
-  });
-
-  cargarIdioma("es"); // idioma por defecto
+  if (selector) {
+    selector.addEventListener("change", e => cargarIdioma(e.target.value));
+    const inicial = localStorage.getItem("idiomaPreferido") || "es";
+    selector.value = inicial;
+    cargarIdioma(inicial);
+  }
 });
 </script>
 
 </body>
 </html>
-

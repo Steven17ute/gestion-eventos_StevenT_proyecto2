@@ -20,7 +20,6 @@
     </ul>
   </nav>
 
-  <!-- Selector de idioma -->
   <label for="selectorIdioma">🌐 Idioma:</label>
   <select id="selectorIdioma">
     <option value="es">Español</option>
@@ -34,22 +33,22 @@
 
     <form id="formContacto">
       <label for="saludo" style="display:none;">Saludo</label>
-      <input id="saludo" placeholder="Saludo (Sr./Sra.)" aria-label="Titulo de cortesía">
+      <input id="saludo" placeholder="Saludo (Sr./Sra.)" aria-label="Saludo inicial">
 
-      <label for="nombre" style="display:none;">Nombre completo</label>
-      <input id="nombre" placeholder="Nombre completo" aria-label="Nombre completo del contacto" required>
+      <label for="nombre" style="display:none;">Nombre</label>
+      <input id="nombre" placeholder="Nombre completo" aria-label="Nombre del contacto" required>
 
       <label for="identificacion" style="display:none;">Identificación</label>
-      <input id="identificacion" placeholder="Identificación (ID)" aria-label="Número de identificación o cédula">
+      <input id="identificacion" placeholder="Identificación (ID)" aria-label="Número de identificación">
 
       <label for="telefono" style="display:none;">Teléfono</label>
-      <input id="telefono" placeholder="Teléfono" aria-label="Número de teléfono de contacto">
+      <input id="telefono" placeholder="Teléfono" aria-label="Teléfono de contacto">
 
       <label for="email" style="display:none;">Email</label>
-      <input type="email" id="email" placeholder="Correo electrónico" aria-label="Dirección de correo electrónico">
+      <input type="email" id="email" placeholder="Correo electrónico" aria-label="Correo electrónico">
 
-      <label for="foto" id="labelFoto">Subir Foto:</label>
-      <input type="file" id="foto" accept="image/*" aria-label="Subir foto del contacto">
+      <label for="foto" id="fotoLabel">Subir Foto:</label>
+      <input type="file" id="foto" aria-label="Subir foto del contacto">
 
       <button type="button" id="btnGuardarContacto" onclick="guardarContacto()">Guardar Contacto</button>
     </form>
@@ -59,7 +58,6 @@
     <h2 id="listaContactosTitulo">Lista de contactos</h2>
     <ul id="listaContactos"></ul>
   </section>
-
 </main>
 
 <footer>
@@ -67,13 +65,10 @@
   <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
 </footer>
 
-<!-- 🔥 FIREBASE CONTACTOS -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
-/* CONFIGURACIÓN FIREBASE CASO 2 */
 const firebaseConfig = {
   apiKey: "AIzaSyAjsWFlifV6vrqfgPaiVvwnV6YeICRBWu4",
   authDomain: "gestion-eventos-caso2.firebaseapp.com",
@@ -85,70 +80,41 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
-/* GUARDAR CONTACTO */
 window.guardarContacto = async function () {
-  try {
-    let fotoURL = "";
+  await addDoc(collection(db, "contactos_caso2"), {
+    saludo: document.getElementById("saludo").value,
+    nombre: document.getElementById("nombre").value,
+    identificacion: document.getElementById("identificacion").value,
+    telefono: document.getElementById("telefono").value,
+    email: document.getElementById("email").value,
+    creado: new Date()
+  });
 
-    const file = document.getElementById("foto").files[0];
-    if (file) {
-      const storageRef = ref(storage, `contactos_caso2/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      fotoURL = await getDownloadURL(storageRef);
-    }
-
-    await addDoc(collection(db, "contactos_caso2"), {
-      saludo: saludo.value,
-      nombre: nombre.value,
-      identificacion: identificacion.value,
-      telefono: telefono.value,
-      email: email.value,
-      foto: fotoURL,
-      creado: new Date()
-    });
-
-    alert("✅ Contacto guardado correctamente");
-    document.getElementById("formContacto").reset();
-    cargarContactos();
-
-  } catch (error) {
-    console.error(error);
-    alert("❌ Error al guardar contacto");
-  }
+  alert("👤 Contacto guardado");
+  document.getElementById("formContacto").reset();
+  cargarContactos();
 };
 
-/* MOSTRAR CONTACTOS */
 async function cargarContactos() {
   const lista = document.getElementById("listaContactos");
   lista.innerHTML = "";
-
   const querySnapshot = await getDocs(collection(db, "contactos_caso2"));
   querySnapshot.forEach((doc) => {
     const c = doc.data();
-    lista.innerHTML += `
-      <li>
-        <strong>${c.saludo || ""} ${c.nombre}</strong><br>
-        🆔 ${c.identificacion || "-"}<br>
-        📞 ${c.telefono || "-"}<br>
-        📧 ${c.email || "-"}<br>
-        ${c.foto ? `<img src="${c.foto}" width="80">` : ""}
-      </li><hr>
-    `;
+    lista.innerHTML += `<li><strong>${c.saludo} ${c.nombre}</strong><br>🆔 ID: ${c.identificacion}<br>📞 Tel: ${c.telefono}<br>📧 Email: ${c.email}</li><hr>`;
   });
 }
-
 cargarContactos();
 </script>
 
-<!-- 🌐 MULTILENGUAJE -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const selector = document.getElementById("selectorIdioma");
 
   async function cargarIdioma(lang) {
     try {
+      localStorage.setItem("idiomaPreferido", lang);
       const res = await fetch(`json/${lang}.json`);
       const t = await res.json();
 
@@ -156,6 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const elemento = document.getElementById(clave);
         if (elemento) {
           elemento.innerText = t[clave];
+
+          if (elemento.tagName === "INPUT") {
+            elemento.placeholder = t[clave];
+            elemento.setAttribute("aria-label", t[clave]);
+          }
         }
       }
     } catch (error) {
@@ -163,11 +134,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  selector.addEventListener("change", e => {
-    cargarIdioma(e.target.value);
-  });
-
-  cargarIdioma("es"); // idioma por defecto
+  if (selector) {
+    selector.addEventListener("change", e => cargarIdioma(e.target.value));
+    const inicial = localStorage.getItem("idiomaPreferido") || "es";
+    selector.value = inicial;
+    cargarIdioma(inicial);
+  }
 });
 </script>
 

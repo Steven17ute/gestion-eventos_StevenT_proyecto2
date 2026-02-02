@@ -33,31 +33,48 @@
   <section>
     <h2 id="registrarEvento">Registrar nuevo evento</h2>
     
-    <form id="formEvento">
-      <input id="tituloEvento" placeholder="Título" required>
-      <input id="invitados" placeholder="Invitados">
-      <input type="date" id="fecha" required>
-      <input type="time" id="hora" required>
-      <input id="zona" placeholder="Zona horaria">
-      <textarea id="descripcion" placeholder="Descripción"></textarea>
-      <input id="clasificacion" placeholder="Clasificación">
-      <input id="lugar" placeholder="Lugar">
+    <!-- FORMULARIO -->
+     <form id="formEvento">
+      <label for="tituloEvento" style="display:none;">Título</label>
+      <input id="tituloEvento" placeholder="Título" aria-label="Título del evento" required>
+      
+      <label for="invitados" style="display:none;">Invitados</label>
+      <input id="invitados" placeholder="Invitados" aria-label="Número de invitados">
+      
+      <label for="fecha" style="display:none;">Fecha</label>
+      <input type="date" id="fecha" aria-label="Fecha del evento" required>
+      
+      <label for="hora" style="display:none;">Hora</label>
+      <input type="time" id="hora" aria-label="Hora del evento" required>
+      
+      <label for="zona" style="display:none;">Zona horaria</label>
+      <input id="zona" placeholder="Zona horaria" aria-label="Zona horaria">
+      
+      <label for="descripcion" style="display:none;">Descripción</label>
+      <textarea id="descripcion" placeholder="Descripción" aria-label="Descripción del evento"></textarea>
+      
+      <label for="clasificacion" style="display:none;">Clasificación</label>
+      <input id="clasificacion" placeholder="Clasificación" aria-label="Clasificación del evento">
+      
+      <label for="lugar" style="display:none;">Lugar</label>
+      <input id="lugar" placeholder="Lugar" aria-label="Lugar del evento">
 
-      <label id="labelRepeticion">Repetición:</label>
-      <select id="repeticion">
+      <label id="labelRepeticion" for="repeticion">Repetición:</label>
+      <select id="repeticion" aria-label="Seleccionar frecuencia de repetición">
         <option value="Sin repetición">Sin repetición</option>
         <option value="Diaria">Diaria</option>
         <option value="Semanal">Semanal</option>
         <option value="Mensual">Mensual</option>
       </select>
 
-      <label>
-        <input type="checkbox" id="recordatorio">
+      <label for="recordatorio">
+        <input type="checkbox" id="recordatorio" aria-label="Activar recordatorio de evento">
         <span id="labelRecordatorio">Activar recordatorio</span>
       </label>
 
       <button type="button" id="btnGuardarEvento" onclick="guardarEvento()">Guardar Evento</button>
     </form>
+    
   </section>
 
   <!-- LISTA -->

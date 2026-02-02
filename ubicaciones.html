@@ -20,7 +20,6 @@
     </ul>
   </nav>
 
-  <!-- Selector de idioma -->
   <label for="selectorIdioma">🌐 Idioma:</label>
   <select id="selectorIdioma">
     <option value="es">Español</option>
@@ -29,7 +28,6 @@
 </header>
 
 <main>
-  <!-- REGISTRO -->
   <section>
     <h2 id="registrarUbicacion">Registrar nueva ubicación</h2>
 
@@ -50,7 +48,6 @@
     </form>
   </section>
 
-  <!-- LISTA -->
   <section>
     <h2 id="listaUbicacionesTitulo">Lista de ubicaciones</h2>
     <ul id="listaUbicaciones"></ul>
@@ -62,12 +59,10 @@
   <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
 </footer>
 
-<!-- 🔥 FIREBASE UBICACIONES -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-/* CONFIGURACIÓN FIREBASE CASO 2 */
 const firebaseConfig = {
   apiKey: "AIzaSyAjsWFlifV6vrqfgPaiVvwnV6YeICRBWu4",
   authDomain: "gestion-eventos-caso2.firebaseapp.com",
@@ -80,13 +75,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* GUARDAR UBICACIÓN */
 window.guardarUbicacion = async function () {
+  const t = document.getElementById("tituloUbicacion").value;
+  const d = document.getElementById("direccion").value;
+  const lat = document.getElementById("latitud").value;
+  const lng = document.getElementById("longitud").value;
+
   await addDoc(collection(db, "ubicaciones_caso2"), {
-    titulo: tituloUbicacion.value,
-    direccion: direccion.value,
-    latitud: latitud.value,
-    longitud: longitud.value,
+    titulo: t,
+    direccion: d,
+    latitud: lat,
+    longitud: lng,
     creado: new Date()
   });
 
@@ -95,42 +94,40 @@ window.guardarUbicacion = async function () {
   cargarUbicaciones();
 };
 
-/* MOSTRAR UBICACIONES */
 async function cargarUbicaciones() {
   const lista = document.getElementById("listaUbicaciones");
   lista.innerHTML = "";
-
   const querySnapshot = await getDocs(collection(db, "ubicaciones_caso2"));
   querySnapshot.forEach((doc) => {
     const u = doc.data();
-    lista.innerHTML += `
-      <li>
-        <strong>${u.titulo}</strong><br>
-        📍 ${u.direccion}<br>
-        🌐 ${u.latitud || "-"}, ${u.longitud || "-"}
-      </li><hr>
-    `;
+    lista.innerHTML += `<li><strong>${u.titulo}</strong><br>📍 ${u.direccion}<br>🌐 ${u.latitud || "-"}, ${u.longitud || "-"}</li><hr>`;
   });
 }
-
-/* CARGAR AL INICIAR */
 cargarUbicaciones();
 </script>
 
-<!-- 🌐 MULTILENGUAJE -->
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const selector = document.getElementById("selectorIdioma");
 
   async function cargarIdioma(lang) {
     try {
+      localStorage.setItem("idiomaPreferido", lang);
       const res = await fetch(`json/${lang}.json`);
       const t = await res.json();
 
       for (const clave in t) {
         const elemento = document.getElementById(clave);
         if (elemento) {
+          // Cambia el texto visible
           elemento.innerText = t[clave];
+
+          // Cambia el placeholder y el aria-label si es un input
+          if (elemento.tagName === "INPUT") {
+            elemento.placeholder = t[clave];
+            elemento.setAttribute("aria-label", t[clave]);
+          }
         }
       }
     } catch (error) {
@@ -138,11 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  selector.addEventListener("change", e => {
-    cargarIdioma(e.target.value);
-  });
+  selector.addEventListener("change", e => cargarIdioma(e.target.value));
 
-  cargarIdioma("es"); // idioma por defecto
+  // Iniciar con el idioma guardado o español
+  const inicial = localStorage.getItem("idiomaPreferido") || "es";
+  selector.value = inicial;
+  cargarIdioma(inicial);
 });
 </script>
 

@@ -6,14 +6,11 @@
   "menuUbicaciones": "Ubicaciones",
   "menuContactos": "Contactos",
   "menuAgenda": "Agenda",
-  
   "saludoTitulo": "Hola",
   "saludoGeneral": "Mucho gusto por habernos visitado. Este sistema sirve para gestionar, registrar y agregar eventos, ubicaciones y contactos, así como editar y eliminar.",
-  
   "btnAyuda": "Ayuda",
   "btnEscuchar": "Escuchar",
   "registroGeneral": "Registro General",
-
   "registrarEvento": "Registrar nuevo evento",
   "tituloEvento": "Título del evento",
   "invitados": "Número de invitados",
@@ -25,14 +22,12 @@
   "labelRecordatorio": "Activar recordatorio",
   "btnGuardarEvento": "Guardar Evento",
   "listaEventosTitulo": "Lista de eventos registrados",
-
   "registrarUbicacion": "Registrar nueva ubicación",
   "tituloUbicacion": "Nombre del lugar",
   "direccion": "Dirección exacta",
   "latitud": "Latitud",
   "longitud": "Longitud",
   "btnGuardarUbicacion": "Guardar Ubicación",
-
   "registrarContacto": "Añadir nuevo contacto",
   "saludo": "Tratamiento (Ej: Sr./Sra.)",
   "nombre": "Nombre completo",
@@ -41,12 +36,10 @@
   "email": "Correo electrónico",
   "foto": "Cargar foto",
   "btnGuardarContacto": "Guardar Contacto",
-
   "resumenEventos": "Total Eventos",
   "resumenUbicaciones": "Total Ubicaciones",
   "resumenContactos": "Total Contactos",
   "pieAutor": "© 2025 INTERACCIÓN HOMBRE MAQUINA - AUTOR STEVEN TIPANTUÑA",
-
   "btnRegresar": "Regresar",
   "btnEditar": "Editar",
   "btnEliminar": "Eliminar",

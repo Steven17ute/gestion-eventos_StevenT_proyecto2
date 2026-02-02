@@ -34,10 +34,17 @@
     <h2 id="registrarUbicacion">Registrar nueva ubicación</h2>
 
     <form id="formUbicacion">
-      <input id="tituloUbicacion" placeholder="Título de la ubicación" required>
-      <input id="direccion" placeholder="Dirección" required>
-      <input id="latitud" placeholder="Latitud (ej: -0.1807)">
-      <input id="longitud" placeholder="Longitud (ej: -78.4678)">
+      <label for="tituloUbicacion" style="display:none;">Nombre del lugar</label>
+      <input id="tituloUbicacion" placeholder="Nombre del lugar" aria-label="Nombre del lugar o edificio" required>
+
+      <label for="direccion" style="display:none;">Dirección</label>
+      <input id="direccion" placeholder="Dirección exacta" aria-label="Dirección de la ubicación" required>
+
+      <label for="latitud" style="display:none;">Latitud</label>
+      <input id="latitud" placeholder="Latitud" aria-label="Coordenada de latitud">
+
+      <label for="longitud" style="display:none;">Longitud</label>
+      <input id="longitud" placeholder="Longitud" aria-label="Coordenada de longitud">
 
       <button type="button" id="btnGuardarUbicacion" onclick="guardarUbicacion()">Guardar Ubicación</button>
     </form>

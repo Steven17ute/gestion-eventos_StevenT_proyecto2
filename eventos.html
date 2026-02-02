@@ -32,6 +32,19 @@
   <!-- REGISTRO -->
   <section>
     <h2 id="registrarEvento">Registrar nuevo evento</h2>
+    <div class="cuadro-bienvenida" style="background: #e7f3fe; border-left: 6px solid #2196F3; padding: 15px; margin-bottom: 20px;">
+        <p id="saludoEventos"></p>
+        <button type="button" id="btnEscuchar">🔊 Escuchar Interfaz</button>
+        <button type="button" id="btnAyuda">❓ Ayuda (Video)</button>
+    </div>
+
+    <div id="helpModal" style="display:none; position:fixed; background:white; border:2px solid black; padding:20px; top:15%; left:25%; z-index:1000; width:50%; box-shadow: 0px 0px 15px rgba(0,0,0,0.5);">
+        <h2 id="tituloAyuda">Guía de Usuario</h2>
+        <p>A continuación, se muestra el paso a paso de cómo usar la aplicación:</p>
+        <iframe width="100%" height="315" src="https://www.youtube.com/embed/TU_ID_VIDEO" frameborder="0" allowfullscreen></iframe>
+        <br><br>
+        <button onclick="cerrarAyuda()">Cerrar</button>
+    </div>
 
     <form id="formEvento">
       <input id="tituloEvento" placeholder="Título" required>

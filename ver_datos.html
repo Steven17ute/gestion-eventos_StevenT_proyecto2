@@ -16,7 +16,6 @@
     </ul>
   </nav>
 
-  <!-- Selector de idioma -->
   <label for="selectorIdioma">🌐 Idioma:</label>
   <select id="selectorIdioma">
     <option value="es">Español</option>
@@ -25,21 +24,18 @@
 </header>
 
 <main>
-  <!-- EVENTOS -->
   <section>
-    <h2 id="eventosTitulo">📅 Eventos</h2>
+    <h2 id="etiquetaEventos">📅 Eventos</h2>
     <ul id="listaEventos"></ul>
   </section>
 
-  <!-- UBICACIONES -->
   <section>
-    <h2 id="ubicacionesTitulo">📍 Ubicaciones</h2>
+    <h2 id="etiquetaUbicaciones">📍 Ubicaciones</h2>
     <ul id="listaUbicaciones"></ul>
   </section>
 
-  <!-- CONTACTOS -->
   <section>
-    <h2 id="contactosTitulo">👤 Contactos</h2>
+    <h2 id="etiquetaContactos">👤 Contactos</h2>
     <ul id="listaContactos"></ul>
   </section>
 
@@ -51,7 +47,6 @@
   <p>&copy; AUTOR STEVEN TIPANTUÑA</p>
 </footer>
 
-<!-- 🔥 FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import {
@@ -63,7 +58,6 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-/* CONFIGURACIÓN FIREBASE CASO 2 */
 const firebaseConfig = {
   apiKey: "AIzaSyAjsWFlifV6vrqfgPaiVvwnV6YeICRBWu4",
   authDomain: "gestion-eventos-caso2.firebaseapp.com",
@@ -87,8 +81,7 @@ eventosSnap.forEach(d => {
       📍 ${e.lugar || "-"}<br>
       <button onclick="editarEvento('${d.id}', '${e.titulo || ""}')">✏️ Editar</button>
       <button onclick="eliminarEvento('${d.id}')">🗑️ Eliminar</button>
-    </li>
-    <hr>
+    </li><hr>
   `;
 });
 
@@ -119,8 +112,7 @@ ubicSnap.forEach(d => {
       📍 ${u.direccion || "-"}<br>
       🌍 ${u.latitud || "-"}, ${u.longitud || "-"}<br>
       <button onclick="eliminarUbicacion('${d.id}')">🗑️ Eliminar</button>
-    </li>
-    <hr>
+    </li><hr>
   `;
 });
 
@@ -142,8 +134,7 @@ contSnap.forEach(d => {
       📞 ${c.telefono || "-"}<br>
       📧 ${c.email || "-"}<br>
       <button onclick="eliminarContacto('${d.id}')">🗑️ Eliminar</button>
-    </li>
-    <hr>
+    </li><hr>
   `;
 });
 
@@ -156,13 +147,13 @@ window.eliminarContacto = async function(id) {
 };
 </script>
 
-<!-- 🌐 MULTILENGUAJE -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const selector = document.getElementById("selectorIdioma");
 
   async function cargarIdioma(lang) {
     try {
+      localStorage.setItem("idiomaPreferido", lang); // Guarda tu elección
       const res = await fetch(`json/${lang}.json`);
       const t = await res.json();
 
@@ -177,15 +168,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  selector.addEventListener("change", e => {
-    cargarIdioma(e.target.value);
-  });
+  selector.addEventListener("change", e => cargarIdioma(e.target.value));
 
-  cargarIdioma("es"); // idioma por defecto
+  // Cargar el idioma que ya viene de las otras páginas
+  const inicial = localStorage.getItem("idiomaPreferido") || "es";
+  selector.value = inicial;
+  cargarIdioma(inicial);
 });
 </script>
-
 </body>
 </html>
-
-

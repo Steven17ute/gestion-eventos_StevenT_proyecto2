@@ -41,34 +41,32 @@ document.addEventListener("DOMContentLoaded", () => {
         cargarIdioma(idiomaGuardado);
     }
 
-    /* ================= 🔊 ESCUCHAR (TTS Adaptativo Corregido) ================= */
-    const btnEscuchar = document.getElementById("btnEscuchar");
-    if (btnEscuchar) {
-        btnEscuchar.addEventListener("click", () => {
-            // Buscamos el saludo (puede tener ID saludoTexto o saludoGeneral)
-            const saludo = document.getElementById("saludoTexto") || document.getElementById("saludoGeneral");
-            const titulo = document.querySelector("h2");
-            
-            // Prioridad de lectura: Saludo > Título
-            let textoParaLeer = "";
-            if (saludo) {
-                textoParaLeer = saludo.innerText;
-            } else if (titulo) {
-                textoParaLeer = titulo.innerText;
-            }
+  /* ================= 🔊 ESCUCHAR (Corregido para saludoGeneral) ================= */
+const btnEscuchar = document.getElementById("btnEscuchar");
 
-            if (textoParaLeer !== "") {
-                window.speechSynthesis.cancel(); // Detener cualquier audio previo
-                const utterance = new SpeechSynthesisUtterance(textoParaLeer);
-                
-                // Ajustar el acento según el idioma seleccionado
-                const langActual = localStorage.getItem("idiomaPreferido") || "es";
-                utterance.lang = (langActual === "en") ? "en-US" : "es-ES";
-                
-                window.speechSynthesis.speak(utterance);
-            }
-        });
-    }
+if (btnEscuchar) {
+    btnEscuchar.addEventListener("click", () => {
+        // Ahora buscamos el ID exacto que tienes en el HTML
+        const elemento = document.getElementById("saludoGeneral");
+        
+        if (elemento) {
+            // 1. Cancelar cualquier voz que esté sonando ahorita
+            window.speechSynthesis.cancel();
+
+            const texto = elemento.innerText;
+            const mensaje = new SpeechSynthesisUtterance(texto);
+            
+            // 2. Detectar el idioma guardado para que hable con el acento correcto
+            const idiomaActual = localStorage.getItem("idiomaPreferido") || "es";
+            mensaje.lang = (idiomaActual === "en") ? "en-US" : "es-ES";
+            
+            // 3. ¡A hablar!
+            window.speechSynthesis.speak(mensaje);
+        } else {
+            console.error("No se encontró el párrafo con ID 'saludoGeneral'");
+        }
+    });
+}
 
     /* ================= 📅 GESTIÓN DE FORMULARIOS (Eventos, Ubicaciones, Contactos) ================= */
     

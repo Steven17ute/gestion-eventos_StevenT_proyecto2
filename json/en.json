@@ -8,13 +8,12 @@
   "menuAgenda": "Agenda",
   
   "saludoTitulo": "Hello",
-  "saludoTexto": "Welcome! This system allows you to manage, register, and add events, locations, and contacts, as well as edit and delete them.",
+  "saludoGeneral": "It's a pleasure to have you visit. This system is used to manage, register, and add events, locations, and contacts, as well as edit and delete them.",
   
   "btnAyuda": "Help",
   "btnEscuchar": "Listen",
   "registroGeneral": "General Record",
 
-  "/* --- EVENTS SECTION --- */": "",
   "registrarEvento": "Register New Event",
   "tituloEvento": "Event Title",
   "invitados": "Number of Guests",
@@ -27,7 +26,6 @@
   "btnGuardarEvento": "Save Event",
   "listaEventosTitulo": "Registered Events List",
 
-  "/* --- LOCATIONS SECTION --- */": "",
   "registrarUbicacion": "Register New Location",
   "tituloUbicacion": "Place Name",
   "direccion": "Exact Address",
@@ -35,7 +33,6 @@
   "longitud": "Longitude",
   "btnGuardarUbicacion": "Save Location",
 
-  "/* --- CONTACTS SECTION --- */": "",
   "registrarContacto": "Add New Contact",
   "saludo": "Salutation (e.g. Mr./Ms.)",
   "nombre": "Full Name",
@@ -45,9 +42,16 @@
   "foto": "Upload Photo",
   "btnGuardarContacto": "Save Contact",
 
-  "/* --- SUMMARY AND FOOTER --- */": "",
   "resumenEventos": "Total Events",
   "resumenUbicaciones": "Total Locations",
   "resumenContactos": "Total Contacts",
-  "pieAutor": "© 2025 HUMAN-COMPUTER INTERACTION - AUTHOR STEVEN TIPANTUÑA"
+  "pieAutor": "© 2025 HUMAN-COMPUTER INTERACTION - AUTHOR STEVEN TIPANTUÑA",
+
+  "btnRegresar": "Go Back",
+  "btnEditar": "Edit",
+  "btnEliminar": "Delete",
+  "sinTitulo": "Untitled",
+  "etiquetaEventos": "Events",
+  "etiquetaUbicaciones": "Locations",
+  "etiquetaContactos": "Contacts"
 }

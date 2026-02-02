@@ -1,5 +1,5 @@
-// ✅ Versión Final Unificada - Steven Tipantuña
-// ✅ Mantiene tus formularios intactos + Multilenguaje + Voz Adaptativa
+
+// formularios intactos + Multilenguaje + Voz Adaptativa
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
           // Si es un input o textarea, cambia el placeholder (para que tus fotos se vean en inglés)
           if (elemento.tagName === "INPUT" || elemento.tagName === "TEXTAREA") {
             elemento.placeholder = t[clave];
+
+            elemento.setAttribute("aria-label", t[clave]);
+
           } else {
             elemento.innerText = t[clave];
           }

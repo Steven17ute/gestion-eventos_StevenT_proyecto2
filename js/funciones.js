@@ -1,100 +1,105 @@
-// ✅ Versión corregida para Caso Práctico 2 - Steven Tipantuña
-// ✅ IDs alineados: Multilenguaje y Sonido funcionando
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ================= 🌐 LÓGICA MULTILENGUAJE ================= */
-    const selectorIdioma = document.getElementById("selectorIdioma");
+  /* ================= EVENTOS ================= */
+  const formEvento = document.getElementById("formEvento");
+  const listaEventos = document.getElementById("listaEventos");
 
-    async function cargarIdioma(lang) {
-        try {
-            localStorage.setItem("idiomaPreferido", lang);
-            const res = await fetch(`json/${lang}.json`);
-            const t = await res.json();
+  if (formEvento) {
+    formEvento.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-            for (const clave in t) {
-                const elemento = document.getElementById(clave);
-                if (elemento) {
-                    if (elemento.tagName === "INPUT" || elemento.tagName === "TEXTAREA") {
-                        elemento.placeholder = t[clave];
-                    } else {
-                        elemento.innerText = t[clave];
-                    }
-                }
-            }
-        } catch (error) {
-            console.error("Error cargando el idioma:", error);
-        }
-    }
+      // CAPTURAR DATOS
+      const titulo = document.getElementById("tituloEvento").value;
+      const invitados = document.getElementById("invitados").value;
+      const fecha = document.getElementById("fecha").value;
+      const hora = document.getElementById("hora").value;
+      const zona = document.getElementById("zona").value;
+      const descripcion = document.getElementById("descripcion").value;
+      const repeticion = document.getElementById("repeticion").value;
+      const recordatorio = document.getElementById("recordatorio").checked ? "Sí" : "No";
+      const clasificacion = document.getElementById("clasificacion").value;
+      const lugar = document.getElementById("lugar").value;
 
-    if (selectorIdioma) {
-        selectorIdioma.addEventListener("change", (e) => cargarIdioma(e.target.value));
-        const idiomaGuardado = localStorage.getItem("idiomaPreferido") || "es";
-        selectorIdioma.value = idiomaGuardado;
-        cargarIdioma(idiomaGuardado);
-    }
+      // CREAR ELEMENTO EN LISTA (solo pruebas locales)
+      const li = document.createElement("li");
+      li.textContent = `${titulo} | Invitados: ${invitados} | Fecha: ${fecha} ${hora} | Zona: ${zona} | Recordatorio: ${recordatorio} | Lugar: ${lugar}`;
+      listaEventos.appendChild(li);
 
-    /* ================= 📅 FORMULARIOS (Eventos, Ubicaciones, Contactos) ================= */
-    const configurarForm = (idForm, idLista) => {
-        const form = document.getElementById(idForm);
-        const lista = document.getElementById(idLista);
-        if (form && lista) {
-            form.addEventListener("submit", (e) => {
-                e.preventDefault();
-                const formData = new FormData(form);
-                const li = document.createElement("li");
-                let resumen = "";
-                formData.forEach((value) => { if(value) resumen += `${value} | `; });
-                li.textContent = resumen.slice(0, -3);
-                lista.appendChild(li);
-                form.reset();
-                alert("✅ Registrado con éxito");
-            });
-        }
-    };
+      formEvento.reset();
+    });
+  }
 
-    configurarForm("formEvento", "listaEventos");
-    configurarForm("formUbicacion", "listaUbicaciones");
-    configurarForm("formContacto", "listaContactos");
+  /* ================= UBICACIONES ================= */
+  const formUbicacion = document.getElementById("formUbicacion");
+  const listaUbicaciones = document.getElementById("listaUbicaciones");
 
-    /* ================= ❓ AYUDA (VIDEO) ================= */
-    const btnAyuda = document.getElementById("btnAyuda");
-    const helpModal = document.getElementById("helpModal");
+  if (formUbicacion) {
+    formUbicacion.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-    if (btnAyuda && helpModal) {
-        btnAyuda.addEventListener("click", () => {
-            helpModal.style.display = "block";
-        });
-    }
+      const titulo = document.getElementById("tituloUbicacion").value;
+      const direccion = document.getElementById("direccion").value;
+      const latitud = document.getElementById("latitud").value;
+      const longitud = document.getElementById("longitud").value;
 
-    /* ================= 🔊 ESCUCHAR (TTS Corregido) ================= */
-    const btnEscuchar = document.getElementById("btnEscuchar");
-    if (btnEscuchar) {
-        btnEscuchar.addEventListener("click", () => {
-            // USAMOS EL ID QUE TIENES EN EL INDEX: "saludoGeneral"
-            const elemento = document.getElementById("saludoGeneral");
-            
-            if (elemento) {
-                window.speechSynthesis.cancel(); // Detener si ya estaba hablando
-                const texto = elemento.innerText;
-                const utterance = new SpeechSynthesisUtterance(texto);
-                
-                // Cambia el acento según el idioma
-                const langActual = localStorage.getItem("idiomaPreferido") || "es";
-                utterance.lang = (langActual === "en") ? "en-US" : "es-ES";
-                
-                window.speechSynthesis.speak(utterance);
-            } else {
-                console.error("No se encontró el elemento 'saludoGeneral'");
-            }
-        });
-    }
+      const li = document.createElement("li");
+      li.textContent = `${titulo} | Dirección: ${direccion} | Lat: ${latitud} | Lng: ${longitud}`;
+      listaUbicaciones.appendChild(li);
+
+      formUbicacion.reset();
+    });
+  }
+
+  /* ================= CONTACTOS ================= */
+  const formContacto = document.getElementById("formContacto");
+  const listaContactos = document.getElementById("listaContactos");
+
+  if (formContacto) {
+    formContacto.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const saludo = document.getElementById("saludo").value;
+      const nombre = document.getElementById("nombre").value;
+      const identificacion = document.getElementById("identificacion").value;
+      const telefono = document.getElementById("telefono").value;
+      const email = document.getElementById("email").value;
+      const foto = document.getElementById("foto").value ? "📷 Foto cargada" : "Sin foto";
+
+      const li = document.createElement("li");
+      li.textContent = `${saludo} ${nombre} | ID: ${identificacion} | Tel: ${telefono} | Email: ${email} | ${foto}`;
+      listaContactos.appendChild(li);
+
+      formContacto.reset();
+    });
+  }
+  /* ================= AYUDA (VIDEO) ================= */
+  const btnAyuda = document.getElementById("btnAyuda");
+  const helpModal = document.getElementById("helpModal");
+
+  if (btnAyuda && helpModal) {
+    btnAyuda.addEventListener("click", () => {
+      helpModal.style.display = "block";
+    });
+  }
+
+  /* ================= ESCUCHAR (TTS) ================= */
+  const btnEscuchar = document.getElementById("btnEscuchar");
+  if (btnEscuchar) {
+    btnEscuchar.addEventListener("click", () => {
+      const texto = document.getElementById("saludoTexto").innerText;
+      const utterance = new SpeechSynthesisUtterance(texto);
+      utterance.lang = "es-ES"; // Cambia a "en-US" si el idioma seleccionado es inglés
+      speechSynthesis.speak(utterance);
+    });
+  }
 });
 
 /* ================= FUNCIÓN CERRAR AYUDA ================= */
 function cerrarAyuda() {
-    const helpModal = document.getElementById("helpModal");
-    if (helpModal) {
-        helpModal.style.display = "none";
-    }
+  const helpModal = document.getElementById("helpModal");
+  if (helpModal) {
+    helpModal.style.display = "none";
+  }
 }

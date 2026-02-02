@@ -7,7 +7,7 @@
   "menuContactos": "Contactos",
   "menuAgenda": "Agenda",
   "saludoTitulo": "Hola",
-  "saludoGeneral": "Mucho gusto por habernos visitado. Este sistema sirve para gestionar, registrar y agregar eventos, ubicaciones y contactos, así como editar y eliminar.",
+  "saludoTexto": "Mucho gusto por habernos visitado. Este sistema sirve para gestionar, registrar y agregar eventos, ubicaciones y contactos, así como editar y eliminar.",
   "btnAyuda": "Ayuda",
   "btnEscuchar": "Escuchar",
   "registroGeneral": "Registro General",

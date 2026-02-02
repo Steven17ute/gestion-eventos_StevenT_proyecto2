@@ -7,7 +7,7 @@
   "menuContactos": "Contacts",
   "menuAgenda": "Agenda",
   "saludoTitulo": "Hello",
-  "saludoGeneral": "It's a pleasure to have you visit. This system is used to manage, register, and add events, locations, and contacts, as well as edit and delete them.",
+  "saludoTexto": "It's a pleasure to have you visit. This system is used to manage, register, and add events, locations, and contacts, as well as edit and delete them.",
   "btnAyuda": "Help",
   "btnEscuchar": "Listen",
   "registroGeneral": "General Record",
